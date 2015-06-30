@@ -73,47 +73,35 @@ public class Controlador {
     }
 
     public static void modificar(VPrincipal aThis, Conexion mdbc) {
-        Empleado empleado = new Empleado("", 0, "", mdbc);
-        VDialog modi = new VDialog(aThis, true);
+        Empleado empleado = new Empleado("",0,"",mdbc);
+        VDialog ventana = new VDialog(aThis, true);
         int idx = aThis.getjTable1().getSelectedRow();
         if (idx > -1) {
-            modi.getjTextField1().setText(aThis.getjTable1().getValueAt(idx, 0).toString());
-            modi.getjTextField2().setText(aThis.getjTable1().getValueAt(idx, 1).toString());
-            modi.getjTextField2().setEditable(false);
-            modi.getjTextField3().setText(aThis.getjTable1().getValueAt(idx, 2).toString());
             boolean bandera;
-            do {
+            ventana.getjTextField1().setText(aThis.getjTable1().getValueAt(idx, 0).toString());
+            ventana.getjTextField2().setText(aThis.getjTable1().getValueAt(idx, 1).toString());
+            ventana.getjTextField2().setEditable(false);
+            ventana.getjTextField3().setText(aThis.getjTable1().getValueAt(idx, 2).toString());
+            do {                
                 bandera = false;
-                modi.setVisible(true);
-                if (modi.getEstado() == 1) {
-                    String apeynom = modi.getjTextField1().getText();
-                    String dni = modi.getjTextField2().getText();
-                    String zona = modi.getjTextField3().getText();
+                ventana.setVisible(true);
+                if (ventana.getEstado() == 1) {
                     try {
-                        empleado.setApeynom(apeynom);
-                        empleado.setDni(Integer.parseInt(dni));
-                        empleado.setZona(zona);
-                        
-                        if (!empleado.buscar()) {
-                            empleado.modificar();
-                            actualizarModelo(aThis.getjTable1(), mdbc);
-                        } else {
-                            JOptionPane.showMessageDialog(aThis, "Empleado no encontrado","Error",JOptionPane.ERROR_MESSAGE);
-                            modi.getjTextField2().selectAll();
-                            modi.getjTextField2().requestFocus();
-                            bandera = true;
-                        }
-                        
+                        empleado.setApeynom(ventana.getjTextField1().getText());
+                        empleado.setDni(Integer.valueOf(ventana.getjTextField2().getText()));
+                        empleado.setZona(ventana.getjTextField3().getText());
+                        empleado.modificar();
+                        actualizarModelo(aThis.getjTable1(), mdbc);
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(aThis, "Datos invalidos","Error",JOptionPane.ERROR_MESSAGE);
-                        modi.getjTextField1().selectAll();
-                        modi.getjTextField1().requestFocus();
+                        JOptionPane.showMessageDialog(aThis, "Error en el ingreso de datos","Error",JOptionPane.ERROR_MESSAGE);
+                        ventana.getjTextField1().selectAll();
+                        ventana.getjTextField1().requestFocus();
                         bandera = true;
                     }
                 }
             } while (bandera);
         } else {
-            JOptionPane.showMessageDialog(aThis, "", "", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(aThis, "Debe seleccionar un empleado para modificar","ERROR",JOptionPane.ERROR_MESSAGE);
         }
     }
     

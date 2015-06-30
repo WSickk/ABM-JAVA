@@ -73,6 +73,7 @@ public class Empleado extends Entidad{
             if (rs.next()) {
                 setApeynom(rs.getString("apeynom"));
                 setZona(rs.getString("zona"));
+                setDni(rs.getInt("dni"));
                 System.out.println(sql);
                 return true;
             }
